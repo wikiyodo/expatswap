@@ -5,6 +5,11 @@ import UserTablePage from "./pages/UserTablePage";
 import "./App.css";
 
 const App = () => {
+  useEffect(() => {
+    // Set page title to "Expatswap"
+    document.title = "Expatswap";
+  }, []);
+
   return (
     <BrowserRouter>
       <div className="app">
