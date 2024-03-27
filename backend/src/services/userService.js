@@ -19,8 +19,14 @@ userService.getUsers = async (page, limit) => {
     // Calculate skip value for pagination
     const skip = (page - 1) * limit;
     // Fetch users from the database
-    const users = await User.find().skip(skip).limit(limit);
-    return users;
+    const [users, totalUsersCount] = await Promise.all([
+      User.find().skip(skip).limit(limit),
+      User.countDocuments(),
+    ]);
+
+    const hasMore = skip + users.length < totalUsersCount;
+
+    return { users, hasMore };
   } catch (error) {
     throw new Error("Error fetching users: " + error.message);
   }
