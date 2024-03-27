@@ -5,7 +5,6 @@ const cors = require("cors");
 
 // Import routes
 const userRoutes = require("./src/routes/userRoutes");
-const authRoutes = require("./src/routes/authRoutes");
 
 // Load environment variables from .env file
 dotenv.config();
@@ -38,7 +37,6 @@ async function startServer() {
 
   // Routes
   app.use("/api/users", userRoutes);
-  app.use("/api/auth", authRoutes);
 
   app.use((err, req, res, next) => {
     console.error(err); // Log the error for debugging purposes

@@ -24,7 +24,6 @@ To get started with the backend server, follow these steps:
 
    ```
    MONGODB_URI=mongodb://localhost:27017/expatswap_user_management
-   JWT_SECRET=mySecretKeyForJWT
    PORT=3000
    ```
 
