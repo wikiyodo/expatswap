@@ -16,7 +16,10 @@ userController.getUsers = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
-    const users = await userService.getUsers(page, limit);
+    const startDate = req.query.startDate || null;
+    const endDate = req.query.endDate || null;
+
+    const users = await userService.getUsers(page, limit, startDate, endDate);
     res.status(200).json(users);
   } catch (error) {
     next(error);

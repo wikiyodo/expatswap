@@ -9,11 +9,18 @@ const UserTablePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(1);
   const [hasMore, setHasMore] = useState(false);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const { users, hasMore } = await api.getUsers(currentPage, pageSize);
+        const { users, hasMore } = await api.getUsers(
+          currentPage,
+          pageSize,
+          startDate,
+          endDate
+        );
 
         console.log(users);
 
@@ -27,7 +34,7 @@ const UserTablePage = () => {
     };
 
     fetchUsers();
-  }, [currentPage, pageSize]);
+  }, [currentPage, pageSize, startDate, endDate]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -37,6 +44,17 @@ const UserTablePage = () => {
     setPageSize(size);
   };
 
+  const handleFilterChange = (e, type) => {
+    const value = e.target.value;
+    if (type === "start") {
+      setStartDate(value);
+    } else {
+      setEndDate(value);
+    }
+  };
+
+  console.log({ startDate, endDate });
+
   return (
     <div>
       <h1>User Table</h1>
@@ -45,8 +63,22 @@ const UserTablePage = () => {
         <p>Loading...</p>
       ) : (
         <div style={{ display: "flex", gap: 15, flexDirection: "column" }}>
-          <UserTable users={users} />
+          <div style={{ display: "flex", gap: 7 }}>
+            <span>Filter by Date of Birth:</span>
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => handleFilterChange(e, "start")}
+            />
+            <span>to</span>
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => handleFilterChange(e, "end")}
+            />
+          </div>
 
+          <UserTable users={users} />
           <div style={{ display: "flex", gap: 7 }}>
             <span>Page:</span>
             <button

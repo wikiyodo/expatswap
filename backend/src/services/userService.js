@@ -14,13 +14,22 @@ userService.createUser = async (userData) => {
   }
 };
 
-userService.getUsers = async (page, limit) => {
+userService.getUsers = async (page, limit, startDate, endDate) => {
   try {
+    let query = {};
+
+    if (startDate && endDate) {
+      query.dateOfBirth = {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate),
+      };
+    }
+
     // Calculate skip value for pagination
     const skip = (page - 1) * limit;
     // Fetch users from the database
     const [users, totalUsersCount] = await Promise.all([
-      User.find().skip(skip).limit(limit),
+      User.find(query).skip(skip).limit(limit),
       User.countDocuments(),
     ]);
 
