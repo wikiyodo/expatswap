@@ -30,8 +30,9 @@ const api = {
     return handleResponse(response);
   },
 
-  async getUsers() {
-    const response = await fetch(`${BASE_URL}/users`);
+  async getUsers(currentPage, pageSize) {
+    const params = new URLSearchParams({ page: currentPage, limit: pageSize });
+    const response = await fetch(`${BASE_URL}/users?${params}`);
     return handleResponse(response);
   },
 };
