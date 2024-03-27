@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import PropTypes from "prop-types";
 
 const CreateUserForm = ({ onSubmit, errors }) => {
@@ -10,6 +10,7 @@ const CreateUserForm = ({ onSubmit, errors }) => {
     password: "",
     dateOfBirth: "",
   });
+  const formRef = useRef(null); // Create a reference to the form element
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,11 +22,11 @@ const CreateUserForm = ({ onSubmit, errors }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    onSubmit(formData, formRef.current);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form ref={formRef} onSubmit={handleSubmit}>
       <div>
         <label htmlFor="firstName">First Name:</label>
         <input
