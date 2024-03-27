@@ -17,6 +17,8 @@ const CreateUserPage = () => {
       // Reset form and state
       setError(null);
       setSuccessMessage("User created successfully!");
+
+      window.dispatchEvent(new Event("formReset"));
     } catch (error) {
       console.log("error::: ", error.message, error.errors);
       setError(error);

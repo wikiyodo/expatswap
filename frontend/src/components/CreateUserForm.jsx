@@ -1,16 +1,31 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 
+const defaultFormState = {
+  firstName: "",
+  lastName: "",
+  phoneNumber: "",
+  email: "",
+  password: "",
+  dateOfBirth: "",
+};
+
 const CreateUserForm = ({ onSubmit, errors }) => {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    phoneNumber: "",
-    email: "",
-    password: "",
-    dateOfBirth: "",
-  });
-  const formRef = useRef(null); // Create a reference to the form element
+  const [formData, setFormData] = useState(defaultFormState);
+
+  useEffect(() => {
+    // Listen for custom event "formReset"
+    const handleFormReset = () => {
+      setFormData(defaultFormState);
+    };
+
+    window.addEventListener("formReset", handleFormReset);
+
+    // Cleanup function to remove event listener
+    return () => {
+      window.removeEventListener("formReset", handleFormReset);
+    };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,11 +37,11 @@ const CreateUserForm = ({ onSubmit, errors }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData, formRef.current);
+    onSubmit(formData);
   };
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <div>
         <label htmlFor="firstName">First Name:</label>
         <input
