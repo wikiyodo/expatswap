@@ -4,7 +4,7 @@ This is the backend server for the Expatswap User Management Module, responsible
 
 ## Technologies Used
 
-- Node.js
+- Node.js v20
 - Express.js
 - MongoDB
 - Mongoose
