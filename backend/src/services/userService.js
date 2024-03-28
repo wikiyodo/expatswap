@@ -18,11 +18,16 @@ userService.getUsers = async (page, limit, startDate, endDate) => {
   try {
     let query = {};
 
-    if (startDate && endDate) {
-      query.dateOfBirth = {
-        $gte: new Date(startDate),
-        $lte: new Date(endDate),
-      };
+    if (startDate || endDate) {
+      query.dateOfBirth = {};
+    }
+
+    if (startDate) {
+      query.dateOfBirth.$gte = new Date(startDate);
+    }
+
+    if (endDate) {
+      query.dateOfBirth.$lte = new Date(endDate);
     }
 
     // Calculate skip value for pagination
@@ -30,7 +35,7 @@ userService.getUsers = async (page, limit, startDate, endDate) => {
     // Fetch users from the database
     const [users, totalUsersCount] = await Promise.all([
       User.find(query).skip(skip).limit(limit),
-      User.countDocuments(),
+      User.countDocuments(query),
     ]);
 
     const hasMore = skip + users.length < totalUsersCount;
