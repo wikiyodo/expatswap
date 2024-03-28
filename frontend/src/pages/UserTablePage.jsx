@@ -6,23 +6,18 @@ const UserTablePage = () => {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(1);
   const [hasMore, setHasMore] = useState(false);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [userFilters, setUserFilters] = useState({
+    pageSize: 1,
+    startDate: "",
+    endDate: "",
+    currentPage: 1,
+  });
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const { users, hasMore } = await api.getUsers(
-          currentPage,
-          pageSize,
-          startDate,
-          endDate
-        );
-
-        console.log(users);
+        const { users, hasMore } = await api.getUsers(userFilters);
 
         setUsers(users);
         setHasMore(Boolean(hasMore));
@@ -34,26 +29,24 @@ const UserTablePage = () => {
     };
 
     fetchUsers();
-  }, [currentPage, pageSize, startDate, endDate]);
+  }, [userFilters]);
 
   const handlePageChange = (page) => {
-    setCurrentPage(page);
+    setUserFilters((prevState) => ({ ...prevState, currentPage: page }));
   };
 
   const handlePageSizeChange = (size) => {
-    setPageSize(size);
+    setUserFilters((prevState) => ({ ...prevState, pageSize: size }));
   };
 
   const handleFilterChange = (e, type) => {
     const value = e.target.value;
     if (type === "start") {
-      setStartDate(value);
+      setUserFilters((prevState) => ({ ...prevState, startDate: value }));
     } else {
-      setEndDate(value);
+      setUserFilters((prevState) => ({ ...prevState, endDate: value }));
     }
   };
-
-  console.log({ startDate, endDate });
 
   return (
     <div>
@@ -67,13 +60,13 @@ const UserTablePage = () => {
             <span>Filter by Date of Birth:</span>
             <input
               type="date"
-              value={startDate}
+              value={userFilters.startDate}
               onChange={(e) => handleFilterChange(e, "start")}
             />
             <span>to</span>
             <input
               type="date"
-              value={endDate}
+              value={userFilters.endDate}
               onChange={(e) => handleFilterChange(e, "end")}
             />
           </div>
@@ -82,14 +75,14 @@ const UserTablePage = () => {
           <div style={{ display: "flex", gap: 7 }}>
             <span>Page:</span>
             <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1 || isLoading}
+              onClick={() => handlePageChange(userFilters.currentPage - 1)}
+              disabled={userFilters.currentPage === 1 || isLoading}
             >
               Prev
             </button>
-            <span>{currentPage}</span>
+            <span>{userFilters.currentPage}</span>
             <button
-              onClick={() => handlePageChange(currentPage + 1)}
+              onClick={() => handlePageChange(userFilters.currentPage + 1)}
               disabled={!hasMore || isLoading}
             >
               Next
@@ -98,7 +91,7 @@ const UserTablePage = () => {
           <div>
             <span>Items per page:</span>
             <select
-              value={pageSize}
+              value={userFilters.pageSize}
               onChange={(e) => handlePageSizeChange(parseInt(e.target.value))}
             >
               <option value={5}>1</option>

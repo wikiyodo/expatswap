@@ -19,7 +19,6 @@ const handleResponse = async (response) => {
 
 const api = {
   async createUser(userData) {
-    console.log("____________", BASE_URL);
     const response = await fetch(`${BASE_URL}/users`, {
       method: "POST",
       headers: {
@@ -30,7 +29,7 @@ const api = {
     return handleResponse(response);
   },
 
-  async getUsers(currentPage, pageSize, startDate, endDate) {
+  async getUsers({ currentPage, pageSize, startDate, endDate }) {
     const params = new URLSearchParams({
       page: currentPage,
       limit: pageSize,

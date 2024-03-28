@@ -20,7 +20,6 @@ const CreateUserPage = () => {
 
       window.dispatchEvent(new Event("formReset"));
     } catch (error) {
-      console.log("error::: ", error.message, error.errors);
       setError(error);
     } finally {
       setIsLoading(false);
